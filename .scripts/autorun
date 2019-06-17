@@ -1,0 +1,26 @@
+#!/bin/bash
+
+h=$(echo $1 | sed -n "/.*\.mkv/p")
+if [ "$h" != "" ] 
+then
+	vlc $1
+else h=$(echo $1 | sed -n "/.*\.jpg/p")
+	if [ "$h" != "" ] 
+	then
+		xviewer $1
+	else h=$(echo $1 | sed -n "/.*\.png/p")
+		if [ "$h" != "" ] 
+		then
+			xviewer $1
+		else h=$(echo $1 | sed -n "/.*\.mp4/p")
+			if [ "$h" != "" ] 
+			then
+				vlc $1
+			else echo $i	
+
+fi 
+fi
+fi
+fi
+
+

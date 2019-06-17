@@ -1,0 +1,6 @@
+#!/bin/bash
+h=$(cisco state | sed -n  '/Disconnected/p' | sed -n  '1s/.*/1/gp') 
+if [ "$h" == "1" ] 
+then
+echo $(echo put -r $(pwd)/.scripts | sftp pi@10.41.3.81 )
+fi 

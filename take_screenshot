@@ -1,0 +1,45 @@
+#!/bin/bash
+FILE=~/.scripts/screenshotc #directory should exist tho
+DIRECTORY="/home/tom/SCREENSHOTS" #PLS don't use aliases like "~" 
+if [ ! -d $DIRECTORY ]; then #creates the directory
+	notify-send -t 5000 -u low "create $DIRECTORY"
+	mkdir -p $DIRECTORY
+fi
+FILE=$( ls $FILE) #in any case there are symbols in it or something like that
+#if [ -f "$FILE" ]; then
+#	echo "JA"
+#else
+#	echo "Nein"
+#fi
+
+if [ -f $FILE ]; then
+	a=$(cat $FILE)
+	i=$(echo -e "$a\n"$(cd $DIRECTORY;find -maxdepth 1 -type f -not -name 't_*'| sed -n -e "s/\.\///" -e "/.*$h/p" | sed -e ':a' -e 'N' -e '$!ba' -e 's/\n/\\n/g' -e 's/.png//g') | dmenu -i -l 5)
+	if [ "$i" == "$a" ]
+		then #wenn a ausgewählt wurde
+			if [[ $a =~ ^[-+]?[0-9]+$ ]]; then #is a number
+				while [ -f $DIRECTORY/$a.png ] # increase a so long till a new file is created, just why not if you have reseted the $FILE to something stupid you don't want to overwrite every file
+				do
+					let a=$a+1
+				done
+				notify-send -t 5000 -u low "$a"
+				i=$a
+				echo $a > $FILE	
+			else 
+				echo "0" > $FILE # creates a proper file tho
+			fi
+	fi
+else	
+	touch $FILE
+	echo "0" > $FILE
+	i=$(echo "" | dmenu )
+fi
+if [ "$i" != "" ]
+then
+	notify-send -t 5000 -u low "Name ist: $DIRECTORY/$i.png"
+	echo "$DIRECTORY/$i.png"
+	import "$DIRECTORY/$i.png" 
+	if [ -f "$DIRECTORY/$i.png" ];then
+		notify-send -t 5000 -u low "$DIRECTORY/$i.png wurde gespeichert!" && xclip -selection clip -t image/png -i "$DIRECTORY/$i.png"
+	fi
+fi

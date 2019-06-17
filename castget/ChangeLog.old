@@ -1,0 +1,293 @@
+This changelog is no longer updated.
+
+See the NEWS file for a summary of changes between each release.
+
+See the commit log on https://github.com/mlj/castget/commits/master for a
+detailed breakdown of recent changes.
+
+---
+
+2013-07-02  Marius L. Jøhndal  <mariuslj@ifi.uio.no>
+
+	* Avoid updating progress bar unless actually changed.
+
+2013-07-01  Marius L. Jøhndal  <mariuslj@ifi.uio.no>
+
+	* Limit the number of prints when updating the progess bar.
+
+2013-06-24  Marius L. Jøhndal  <mariuslj@ifi.uio.no>
+
+	* Fixed incorrect freeing of enclosure_full_filename on enclosure write failure.
+	* Ensure that output starts on new line after download with progress bar enabled.
+
+2013-06-16  Marius L. Jøhndal  <mariuslj@ifi.uio.no>
+
+	* Switched to glib's options parsing.
+	* Corrected location of binaries in gitignore file.
+	* Added optional download progress bar.
+	* Added --debug option for connection debugging.
+	* Added short section on HTTP proxy use to castget(1).
+	* Updated links in documentation.
+
+2011-05-15  Marius L. Jøhndal  <mariuslj@ifi.uio.no>
+
+	* Copyright update and whitespace removal.
+
+2010-02-20  Marius L. Jøhndal  <mariuslj@ifi.uio.no>
+
+	* configure.ac: Bumped version number to 1.1.0.
+
+2007-11-14  Marius L. Jøhndal  <mariuslj@ifi.uio.no>
+
+	* castget.1.in, castgetrc.5.in, src/castget.c, src/channel.c,
+	src/channel.h, src/configuration.c, src/configuration.h: Added
+	support for per-channel enclosure regex filters.
+
+	* src/castget.c: Made rcfile non-global. Synchronised help message
+	with man page.
+
+	* README: Added details about dependencies.
+
+	* configure.ac: Switched to bzip2 for dist files.
+
+	* castget.1.in, configure.ac, src/castget.c, src/channel.c,
+	src/channel.h: Added support for restricting operations to
+	enclosures matching a regex given on the command line.
+
+2007-11-14  Marius L. Jøhndal  <mariuslj@ifi.uio.no>
+
+	* configure.ac: Bumped version number to 1.0.1.
+
+2007-11-13  Marius L. Jøhndal  <mariuslj@ifi.uio.no>
+
+	* libcastget/utils.c: Improved handling of out of disk space
+	errors. Removed superfluous close().
+
+2007-10-18  Marius L. Jøhndal  <mariuslj@ifi.uio.no>
+
+	* libcastget/urlget.c: Added custom User-Agent header.
+
+	* castget/castget.c: Updated banner copyright.
+
+2007-10-12  Marius Larsen Jøhndal  <mariuslj@ifi.uio.no>
+
+	* castget.1.in: Documented --rcfile option.
+
+2007-10-12  Jick Nan  <jick.nan@gmail.com>
+
+	* src/castget.c: Add --rcfile <path/to/rcfile> option.
+
+2007-09-20  Marius L. Jøhndal  <mariuslj@ifi.uio.no>
+
+	* configure.ac: Bumped version number to 1.0.0.
+
+	* castgetrc.5.in: Minor language clean-up.
+
+2007-09-20  Marius Larsen Jøhndal  <mariuslj@ifi.uio.no>
+
+	* src/Makefile.am, src/castget.c, src/channel.c, src/channel.h,
+	src/libcastget.h, src/rss.h, src/urlget.c, src/urlget.h,
+	src/utils.c, src/utils.h: Eliminated libcastget.h.
+
+	* configure.ac, src/Makefile.am, src/castget.c,
+	src/configuration.c, src/htmlent.h, src/rss.c, src/urlget.h,
+	src/channel.c, src/configuration.h, src/libxmlutil.c, src/rss.h,
+	src/utils.c, src/channel.h, src/htmlent.c, src/libxmlutil.h,
+	src/urlget.c, src/utils.h: Moved all source files into a single
+	subdirectory src/ in order to remove libcastget.
+
+2007-02-15  Marius L. Jøhndal  <mariuslj@ifi.uio.no>
+
+	* configure.ac: Bumped version number to 0.9.6.
+
+	* castget.1.in, castget/castget.c, libcastget/channel.c,
+	libcastget/channel.h, libcastget/libcastget.h,
+	libcastget/urlget.c, libcastget/urlget.h: Added --resume option
+	(Jick Nan).
+
+2007-01-24  Marius L. Jøhndal  <mariuslj@ifi.uio.no>
+
+	* castget/castget.c: Added --new-only option (Jick Nan).
+
+	* castget.1.in, castgetrc.5.in: Documented --new option. Clarified
+	behaviour of channel files when configurations are removed from
+	configuration files.
+
+	* libcastget/rss.c, libcastget/rss.c: Added the field fetched_time
+	to the RSS file structure.
+
+	* castget/castget.c, libcastget/libcastget.c,
+	libcastget/libcastget.h: Refactored libcastget_channel_update,
+	libcastget_channel_catchup and libcastget_channel_list. Added
+	first_only flag.
+
+	* castget/castget.c, castget.1.in: Added --first-only option.
+
+2006-11-09  Marius L. Jøhndal  <mariuslj@ifi.uio.no>
+
+	* castget.1.in: Clarified intended behaviour of the --list option.
+
+2006-09-03  Marius L. Jøhndal  <mariuslj@ifi.uio.no>
+
+	* configure.ac: Tried to correct problems with the id3lib checking
+	failing to link.
+
+2006-07-28  Marius L. Jøhndal  <mariuslj@ifi.uio.no>
+
+	* castget/castget.c: Fixed a problem with the "quiet" option
+	interfering with the writing of ID3 tags (!)
+
+	* castget/castget.c, libcastget/rss.c, libcastget/utils.c:
+	Removed some warnings.
+
+2006-07-22  Marius L. Jøhndal  <mariuslj@ifi.uio.no>
+
+	* castget.c: Changed printing of file sizes to use kB, MB, and GB
+	also when listing available downloads.
+
+2006-07-08  Marius L. Jøhndal  <mariuslj@ifi.uio.no>
+
+	* configure.ac: Bumped version number to 0.9.5.
+
+	* castgetrc.5.in, Makefile.am, configure.ac: Added new man page on
+	the configuration file.
+
+	* castget.1.in: Clarifyed the default behaviour of castget when
+	invoked without arguments. Added reference to castgetrc(5).
+
+	* castget/castget.c: Added verification of keys in configuration
+	file.
+
+2006-06-21  Marius L. Jøhndal  <mariuslj@ifi.uio.no>
+
+	* libcastget/utils.c: Rewrote temporary file handling to avoid
+	renaming files across devices.
+
+2006-06-10  Marius L. Jøhndal  <mariuslj@ifi.uio.no>
+
+	* configure.ac: Bumped version number to 0.9.4.
+
+	* libcastget/channel.c: Added missing escaping of URLs written to
+	channel file.
+
+	* castget/castget.c: Removed silly verbosity check from channel
+	listing function.
+
+	* castget/castget.c: Fixed bad handling of errors generated by
+	g_key_file_load_from_file when loading configuration files.
+
+2006-06-09  Marius L. Jøhndal  <mariuslj@ifi.uio.no>
+
+	* libcastget/Makefile.am, libcastget/htmlent.c,
+	libcastget/htmlent.h, libcastget/rss.c: Added work-around for HTML
+	entitites in RSS files.
+
+2006-05-25  Marius L. Jøhndal  <mariuslj@ifi.uio.no>
+
+	* castget.c: Removed misplaced libcastget_channel_free() in
+	channel parsing function.
+
+2006-05-06  Marius L. Jøhndal  <mariuslj@ifi.uio.no>
+
+	* castget.c: Removed printing of enclosure length when length is
+	zero. Fixed broken enclosure MIME type check when no MIME type
+	appears in RSS feed.
+
+2006-03-30  Marius L. Jøhndal  <mariuslj@ifi.uio.no>
+
+	* rss.c, libcastget.h, channel.c, castget.c: Moved enclosure
+	filename into enclosure structure and changed progress output to
+	filename instead of URL.
+
+2006-03-21  Marius L. Jøhndal  <mariuslj@ifi.uio.no>
+
+	* configure.ac: Bumped version number to 0.9.3.
+
+	* libcastget.h, rss.c, libxmlutil.c, libxmlutil.h: Added support
+	for the MRSS content tag. MRSS information will be preferred over
+	attributes on an enclosure tag.
+
+	* castget.c: Changed printing of file sizes to use kB, MB, and GB
+	when suitable. Some formatting adjustments to progress printout.
+
+2005-12-08  Marius L. Jøhndal  <mariuslj@ifi.uio.no>
+
+	* configure.ac: Bumped version number to 0.9.2.
+
+	* libcastget/rss.c, libcastget/utils.c: Fixed invalid cross device
+	link errors caused by uninitialized pointer in temporary file
+	function.
+
+2005-12-07  Marius L. Jøhndal <mariuslj@ifi.uio.no>
+
+	* castget/castget.c: Added a missing test to exclude the global
+	group "*" from channel iteration.
+
+2005-12-01  Marius L. Jøhndal <mariuslj@ifi.uio.no>
+
+	* castget/castget.c: Fixed broken handling of missing configuration
+	file.
+
+2005-12-01  Marius L. Jøhndal <mariuslj@ifi.uio.no>
+
+	* libcastget/Makefile.am: Removed superfluous (and broken) include
+	path.
+
+2005-11-19  Marius L. Jøhndal <mariuslj@ifi.uio.no>
+
+	* configure.ac: Bumped version number to 0.9.1.
+
+2005-11-19  Marius L. Jøhndal <mariuslj@ifi.uio.no>
+
+	* Makefile.am, castget.1.in, configure.ac: Added man
+	page for castget program.
+
+2005-11-19  Marius L. Jøhndal <mariuslj@ifi.uio.no>
+
+	* castgetrc.example, castget/castgetrc.example, Makefile.am,
+	castget/Makefile.am: Moved example configuration file to top-level
+	directory.
+
+2005-11-19  Marius L. Jøhndal <mariuslj@ifi.uio.no>
+
+	* castget/Makefile.am, castget/castget.c,
+	castget/castgetrc.example, castget/configuration.c,
+	castget/configuration.h: Added a global section to the
+	configuration file.
+
+2005-11-14  Marius L. Jøhndal <mariuslj@ifi.uio.no>
+
+	* castget/castget.c: Expanded usage information.
+
+2005-11-14  Marius L. Jøhndal <mariuslj@ifi.uio.no>
+
+	* configure.ac: Bumped version number for initial release.
+
+2005-11-14  Marius L. Jøhndal <mariuslj@ifi.uio.no>
+
+	* libcastget/channel.c, libcastget/channel.h, libcastget/utils.c,
+	libcastget/utils.h: Added timestamping of channel updates and
+	enclosure downloads.
+
+2005-11-13  Marius L. Jøhndal <mariuslj@ifi.uio.no>
+
+	* libcastget/channel.c, libcastget/rss.c, libcastget/urlget.c,
+	libcastget/urlget.h, libcastget/utils.c, libcastget/utils.h:
+	Switched to downloading RSS file to temporary file in order to
+	avoid recurrent libxml2 parse errors.
+
+2005-11-13  Marius L. Jøhndal <mariuslj@ifi.uio.no>
+
+	* castget/castget.c: Added user-defined per-channel ID3 tags.
+
+2005-10-24  Marius L. Jøhndal <mariuslj@ifi.uio.no>
+
+	* libcastget/Makefile.am, libcastget/channel.c, libcastget/utils.c,
+	libcastget/utils.h: Modified channel file saving function to use
+	temporary files. Added proper XML prologue and a version number to
+	channel files.
+
+2005-08-28  Marius L. Jøhndal <mariuslj@ifi.uio.no>
+
+	* castget/castget.c: Check return value of libcastget_channel_new
+	and report error. Moved libxml2 to main block for now.

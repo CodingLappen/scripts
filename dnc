@@ -1,0 +1,25 @@
+#!/bin/bash
+#dnc stands for download and copy
+DIRECTORY=/home/tom/picture_download
+if [ !-d $DIRECTORY ]; then 
+	mkdir -p $DIRECTORY
+fi
+j=$(dmenu)
+for i in j do
+	for c in "png jpg"; do
+		a= $(echo $i | sed "s/https:.*$c//g") # matches  jpg and .png files
+		if [ $a=="" ]; then
+			tmp=$(echo $i | sed "s@^[a-zA-Z0-9]*$c@@g" ) # replace the whole uml by the actual name wth the ending .jpg or .png
+			wget $i
+			xclip -selection -t image/$c -i "$DIRECTORY/$tmp"
+		fi	
+	done
+	for c in "txt c java py html js h hs"; do
+		a=$(echo $i | sed "s/https:.*$c//g")
+		if [ $a=="" ]; then
+			tmp=$(echo $i | sed "s@^[a-zA-Z0-9]*$c@@g" )
+			wget $i
+			
+			xclip -selection -i "$DIRECTORY/$tmp"
+	done 
+done

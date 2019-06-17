@@ -1,0 +1,23 @@
+#!/bin/bash
+
+function read_per () {
+echo "#!/bin/bash"
+while read line 
+do 
+eins=$(echo "$line" | sed -n "s/\ .*//gp") #copy everything in front of " "
+zwei=$(echo "$line" | sed -n "s/.*\ //gp") #copy everything after it
+h=$(echo "$eins" |  sed 's/\\/\\\\/g'| sed 's/\//\\\//g' | sed 's/\ /\\\ /g' | sed 's/\./\\\./g' | sed -n "/.*/p")
+h="if [ \"\$(echo \$1 | sed -n '/.*$h/p' )\" != \"\" ]; then eval \"$zwei \$(pwd)/\$1\"; fi "
+echo "$h"
+done 
+}
+
+cat $HOME/.config/.filem | read_per
+
+cat "$HOME/.config/.filem" | sed -e "/#/d" -e '/^$/d' |read_per  > "$HOME/.scripts/fileconfig"  
+#					^	^
+#					|	|
+# 					Delete Comments
+#						|
+#						Delete WhiteSpace-Lines				
+

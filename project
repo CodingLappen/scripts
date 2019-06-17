@@ -1,0 +1,5 @@
+#!/bin/bash
+[$1 != "" && h=$(echo $1 | sed 's/\\/\\\\/g' | sed 's/\ /\\\ /g' | sed 's/\./\\\./g') #take important stuff
+[$h == ""] && h="." # take everything
+echo $h
+echo -e $(ls | sed -n "/$h/p" | sed -e ':a' -e 'N' -e '$!ba' -e 's/\n/\\n/g') | dmenu -i

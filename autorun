@@ -1,0 +1,27 @@
+#!/bin/bash
+#i="$(echo $1 | sed 's/\\/\\\\/g' | sed 's/\ /\\\ /g')"
+echo "$1"
+h=$(echo $1 | sed -n "/.*\.mkv/p")
+if [ "$h" != "" ] 
+then
+	 eval "vlc $(pwd)/$1"
+else h=$(echo $1 | sed -n "/.*\.jpg/p")
+	if [ "$h" != "" ] 
+	then
+		eval "xviewer $(pwd)/$1"
+	else h=$(echo $1 | sed -n "/.*\.png/p")
+		if [ "$h" != "" ] 
+		then
+			eval "xviewer $(pwd)/$1"
+		else h=$(echo $1 | sed -n "/.*\.mp4/p")
+			if [ "$h" != "" ] 
+			then
+				eval "vlc $(pwd)/$1"
+			else echo "$1"	
+
+fi 
+fi
+fi
+fi
+
+

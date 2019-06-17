@@ -1,0 +1,7 @@
+#!/bin/sh
+
+echo "Used Video Player $VIDEOPLAYER"
+i="$1"
+
+youtube-dl --list-extractors
+youtube-dl -o - $i | vlc -

@@ -1,0 +1,18 @@
+#!/bin/sh
+LOCATIONS=$(cat /home/tom/.config/pdf.txt)
+echo $LOCATIONS
+
+pdf1() {
+for i in $1
+do
+	cd $i
+	find -maxdepth 1 -mindepth 1 -type f -iname '*.pdf' | sed "s@\./@$i/@g"
+done
+}
+
+i=$(pdf1 $LOCATIONS)
+
+ i=$(echo "$i" | fzy)
+if [ "$i"!="" ]; then
+	zathura $i
+fi

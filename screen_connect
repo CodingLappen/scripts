@@ -1,0 +1,67 @@
+
+#!/bin/bash
+
+name_1="DP-3"
+dev_1="DP-2-1"
+command_1="--mode 1920x1080 --same-as eDP-1"
+
+name_2="DP-5"
+dev_2="DP-2-3"
+command_2="--mode 1680x1050 --right-of DP-2-1"
+
+
+name_3="eDP-1"
+dev_3="eDP-1"
+command_3="--auto"
+
+func_name() {
+	m=$1
+	x="$(eval echo \$name_$1)"	
+	y="$(eval echo \$dev_$1)"
+	z="$(eval echo \$command_$1)"
+	if [ "$2" == "1" ];then
+		echo $x
+	elif [ "$2" == "2" ];then
+		echo $y
+	
+	elif [ "$2" == "3" ];then
+		echo $z
+	else
+		echo ""
+	fi
+}
+
+
+
+
+PATH="/sys/class/drm/card0-"
+
+name="1 2 3"
+
+
+
+for i in $name
+do
+	eval echo "\$name_$i"	
+	eval echo "\$dev_$i" 
+	eval echo "\$command_$i" 
+	m="$(func_name $i 1)"
+	n="$(func_name $i 2)"
+	o="$(func_name $i 3)"
+	s="$( /bin/cat $PATH$m/status)"
+	echo "$PATH$m"
+	t="$( /bin/cat $PATH$m/enabled)"
+	echo "$s $t"
+	if [ "$s" == "connected" ] 
+	then
+ 		if [ "$t" == "disabled"  ]; then
+			notify-send "Enabling Desktop $dev_1"
+			eval /usr/bin/xrandr --output $n $o
+		fi
+	elif [ "$s" == "disconnected" ]; then
+		if [ "$t" == "enabled" ]; then
+			eval /usr/bin/xrandr --output $n --off
+			notity-send "Disabling Desktop $dev_1"
+		fi				
+	fi
+done

@@ -1,0 +1,1 @@
+xclip -in -selection primary $HOME/pw

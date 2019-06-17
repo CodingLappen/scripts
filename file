@@ -1,0 +1,11 @@
+i=$(ls | fzy)
+DIRECTORY="$(pwd)"
+while [ -d "$i" ] 
+do
+DIRECTORY=$DIRECTORY/$i
+cd $i
+i=$(ls | fzy)
+done
+if [ $i != "" ]; then
+	xdg-open $i
+fi

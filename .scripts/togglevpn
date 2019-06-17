@@ -1,0 +1,6 @@
+#!/bin/bash 
+h=$(cisco state | sed -n  '/Connected/p' | sed -n  '1s/.*/1/gp')
+if [ "$h" == "1" ]
+then dis.sh
+else rec
+fi

@@ -1,0 +1,3 @@
+#!/bin/sh
+mate-settings-daemon --replace & disown
+

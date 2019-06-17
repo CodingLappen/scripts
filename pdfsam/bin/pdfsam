@@ -1,0 +1,4 @@
+#!/bin/sh
+
+
+exec /home/tom/.scripts/pdfsam/bin/pdfsam.sh 

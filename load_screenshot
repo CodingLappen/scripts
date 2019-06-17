@@ -1,0 +1,32 @@
+#!/bin/bash
+DIRECTORIES="/home/tom/SCREENSHOTS"
+for i in $DIRECTORIES
+do
+	if [ -d "$i" ]; then
+		
+		s="$s$(ls $i | sed -e 's/.png//g' | sed -e 's/.jpeg//g' | sed -e 's/.jpg//g' | sed -e 's/.gif//g' )\n" 
+	fi
+done
+
+i=$(echo -e "$s" | fzy)
+
+if [ "$i" != "" ]; then
+	
+
+
+	for j in $DIRECTORIES
+	do
+		if [ -f "$j/$i.jpeg" ]; then
+			xclip -selection clip -t image/jpg -i "$j/$i.jpeg"	
+		fi
+		if [ -f "$j/$i.jpg" ]; then
+			xclip -selection clip -t image/jpg -i "$j/$i.jpg"	
+		fi
+		if [ -f "$j/$i.gif" ]; then
+			xclip -selection clip -t image/gif -i "$j/$i.gif"	
+		fi
+		if [ -f "$j/$i.png" ]; then  
+			xclip -selection clip -t image/png -i "$j/$i.png"	
+		fi ## lowest is highest priority
+	done
+fi

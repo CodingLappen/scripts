@@ -1,0 +1,17 @@
+source "`ueberzug library`"
+
+# process substitution example:
+r="$(pwd)/$1"
+if [ -f $r ]; then 
+	P="$r"
+
+else  P="$1"
+
+
+
+
+ImageLayer 0< <(
+    ImageLayer::add [identifier]="$1" [x]="0" [y]="0" [path]="$P"
+    ImageLayer::remove [identifier]="$1"
+)
+

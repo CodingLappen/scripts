@@ -1,0 +1,60 @@
+#!/bin/bash 
+
+# Watch dir, may contain spaces:
+watchdir="/home/tom/Downloads"
+
+# move file to a subdirectory? if Commented out, it'll removed remove
+# the torrent file.
+# Note: Don't put a '/' before the path!
+#movesubdir="added/"
+
+dwdir="/home/tom/torrent"
+trdonesscript=""
+# Authentication "username:password":
+#tr_auth="admin:admin"
+
+# Transmission host "ip:port":
+# tr_host="127.0.0.1:9091"
+
+# Verbose?
+
+
+verbose=1
+
+#############################################
+time=$(date "+%Y-%m-%d (%H:%M:%S)")
+if [ -n "$tr_auth" ]; then 
+    tr_auth="--auth $tr_auth"
+fi
+#############################################
+if [	-n "$trdonescript" ]; then
+	trdonescript="--torrent-done-script $trdonescript"
+fi
+#############################################
+if [ -n "$dwdir" ]; then
+	dwdir="--download-dir $dwdir"
+fi
+
+#############################################
+#############################################j
+
+echo "$dwdir"
+echo "$watchdir"/*.torrent | sed "s/ /\n/g"
+
+# for debugging
+
+for file in "$watchdir"/*.torrent
+do
+    if [ -f "$file" ]; then
+        if [ -n "$verbose" ]; then echo "$time: $file added to queue."; fi
+
+        /usr/bin/transmission-remote --add "$file" 
+        # give the remote some time to process
+        sleep 5 
+    else
+        if [ -n "$verbose" ]; then echo "$time: No torrent in $watchdir."; fi
+    fi
+done
+
+exit 0
+

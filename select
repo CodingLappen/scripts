@@ -1,0 +1,8 @@
+#!/bin/bash
+a=3
+while [ $# -gt $a ]
+do
+	b="$b$a"	
+	a=$(( $a + 1 ))
+done
+ls *"$1" | fzy -l 10 | xargs -I {} "$2" {} "$b" 

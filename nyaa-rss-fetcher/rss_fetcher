@@ -1,0 +1,101 @@
+#!/bin/bash
+#Configuration 
+
+
+#CONFIGDIR=
+#WATCHDIR=
+DOWNLOADDIR=~/nyaa-rss-fetcher/torrent
+TORRENT_ADD="deluge-console add "
+# AS AN EXAMPLE YOU CAN ADD HERE SOMETHING LIKE TRANSMISSION-REMOTE --ADD OR DELUGE-CONSOLE "add "
+# IMPORTANT IS THAT THE FILE IS THE LAST ARGUKENT OF THE COMMAND; if you cannot do that, create a little script, or export a function
+#Main functions declaration of Variables
+ [[ -z "$CONFIGDIR" ]] && CONFIGDIR=$HOME/.config/nyaafetcher
+ [[ ! -d "$CONFIGDIR" ]] && mkdir -p "$CONFIGDIR" && echo "Directory did not exist, you have to add a config file, Please see the readme file" && exit 1;
+ [[ -z "$DOWNLOADDIR" ]] && DOWNLOADDIR=$HOME/Downloads
+ [[ ! -d "$DOWNLOADDIR" ]] && mkdir -p "$DOWNLOADDIR" && echo "Download-directory did not exist and was created."
+FILE="$CONFIGDIR"/conf
+[[ ! -f "$FILE" ]] && echo "Create a config file and fill it addresses of rss feeds"
+
+
+#Declarations of functions
+function download() {
+[[ -z "$2" ]] && cd "$2"
+[[ -z "$1" ]] && exit 1;
+[[ -f /usr/bin/wget ]] && wget "$1" -O tmp.rss && return
+[[ -f /usr/bin/curl ]] && curl "$1" --output tmp.rss && return
+echo "Did not work" #&& exit 1
+}
+
+function download_with_name() {
+[[ -z "$1" ]] && exit 1
+DIRECTORY=$2
+[[ -z "$2" ]] && DIRECTORY="$(pwd)" #-bq
+[[ -f /usr/bin/wget ]] && wget -q -P "$2" "$1" && return
+[[ -f /usr/bin/curl ]] && ( cd $DIRECTORY ; curl -s "$1" ) && return
+echo "Did not work" #&& exit 1
+}
+function filter_for_torrent () {
+	# If I could replace this expression , I could use it for anything
+	cat "$1" | sed  -n -e "/^\s*.*link.*download.*/p"| sed -e "s/\s//g" -e "s/<link>//g" -e "s/<\/link>//g" ;
+	#filter for links that contain a .torrent, and remove the tags
+	# a bit unnessary to do this with a 2 instances of sed and also 4 Expressions where it probably could have been like 2( still dividing in searching and filtering I guess)  or even one
+}
+function filter_expressions () {
+	[[ -z "$2" ]] && exit 0;
+	[[ -z "$1" ]] && exit 0;
+	data="$1"
+	for i in $2 
+	do 
+		data="(echo $data | sed -e \"$i\")"
+	done 
+	echo $data
+}
+
+function clean_up() {
+ 	[[ -f tmp.rss ]] && rm -f tmp.rss
+ 	[[ -f tmp ]] && rm -f tmp
+ 	[[ -f tmp2 ]] && rm -f tmp2
+}
+function filter_download() {
+##	TODO:	
+##	REPLACE THE USE FILES AND CAT WITH VARIABLES, because it's definitly faster.
+##
+##
+##
+	clean_up
+	DIRECTORY="$1"		#
+	URL="$1"		#Use the URL also as the DIRECTORY 
+	TORRENT_ADD="$2"
+	download "$URL"
+	NECESSARY_FILES="$(filter_for_torrent tmp.rss)" 
+	echo "$NECESSARY_FILES" > tmp
+	ls | while read line ; do  			# I love that method
+		echo "" > tmp2
+		cat tmp | while read i ; do
+			echo "$i"
+			[[ ! -z "$i" ]] && [[ "$(basename $i)" != "$line" ]] && echo "$i" >> tmp2
+		done
+		cat tmp2 > tmp
+	done
+	NECESSARY_FILES="$(cat tmp)"
+	export -f download_with_name
+	echo "$NECESSARY_FILES" | xargs -t -I {} bash -c "download_with_name "{}		#Shit tier loop atually
+	echo "$NECESSARY_FILES" | xargs -t -I {} basename {} | xargs -t -I {} $TORRENT_ADD {} 	#This too
+	clean_up
+	# reeeeee "$(echo $TORRENT_ADD | sed s/'<TOKEN>'/"{reeeeee /g )" 	
+}
+#Main functionality
+data="$(cat $FILE)"  # This will remove the line breaks so it is now possible to iterate through the array 
+echo "$data"
+for i in $data ; do
+	tmp=$(pwd)
+	echo "$i"
+	DOWNLOADDIR="$(echo $i | sed 's!\/!!g')" 		#Replace the '/' in each String, because otherwise the subdirectory will be endlessly deep and replacing them by doing \/ didn't worked out.
+	[[ -d "$DOWNLOADDIR" ]] || mkdir -p "$DOWNLOADDIR"
+	cd "$DOWNLOADDIR"
+	pwd
+	filter_download "$i" "$TORRENT_ADD"
+	cd $tmp		# The case where mkdir fails, isn't to be expected, because otherwise wget and curl wouldn't work, too
+			# cd Fails when the directory is not executeable {+x flag} 
+			# TODO: Implement a proof for that.
+done

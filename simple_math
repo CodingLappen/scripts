@@ -1,0 +1,6 @@
+for i in $(seq -4 1 4)
+do 
+	let a=$i*$i
+	let a=$a/2-2
+	echo $a
+done 

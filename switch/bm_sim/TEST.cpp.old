@@ -1,0 +1,74 @@
+#include "switch.cpp"
+
+#include "crc_map.h"
+#include "crc_tables.h"
+#include "extract.h"
+//#include "lpm_trie.h"
+#include "md5.h"
+#include "utils.h"
+#include "version.h"
+#include "xxhash.h"
+#include "action_profile.cpp"
+#include "actions.cpp"
+#include "ageing.cpp"
+#include "_assert.cpp"
+#include "bytecontainer.cpp"
+#include "calculations.cpp"
+#include "checksums.cpp"
+#include "conditionals.cpp"
+#include "context.cpp"
+#include "control_action.cpp"
+#include "counters.cpp"
+#include "crc_map.cpp"
+#include "debugger.cpp"
+#include "deparser.cpp"
+#include "dev_mgr_bmi.cpp"
+#include "dev_mgr.cpp"
+#include "dev_mgr_packet_in.cpp"
+#include "enums.cpp"
+#include "event_logger.cpp"
+#include "expressions.cpp"
+#include "extern.cpp"
+#include "fields.cpp"
+#include "headers.cpp"
+#include "header_unions.cpp"
+#include "learning.cpp"
+#include "logger.cpp"
+#include "lookup_structures.cpp"
+#include "match_tables.cpp"
+#include "match_units.cpp"
+#include "meters.cpp"
+#include "options_parse.cpp"
+//#include "P4Objects.cpp"
+#include "packet.cpp"
+#include "parser.cpp"
+#include "parser_error.cpp"
+#include "pcap_file.cpp"
+#include "periodic_task.cpp"
+#include "phv.cpp"
+#include "phv_source.cpp"
+#include "pipeline.cpp"
+#include "port_monitor.cpp"
+#include "simple_pre.cpp"
+#include "simple_pre_lag.cpp"
+#include "source_info.cpp"
+#include "stacks.cpp"
+#include "stateful.cpp"
+#include "tables.cpp"
+#include "target_parser.cpp"
+#include "transport.cpp"
+#include "transport_nn.cpp"
+namespace std {
+int main(int argc, char **argv ) {
+	 char buffer[200] = "010101010";  // I don't know if this string should be encoded. 
+	const int len = 0; //Hier die Länge eintragen. 
+	const int port = 1000;
+	 if (argc < 2 ) return 2;
+	std::shared_ptr<bm::TransportIface> my_transport ;
+	std::unique_ptr<bm::DevMgrIface> my_dev_mgr ;
+	SwitchWContexts::SwitchWContexts aswitch(true);
+	int status = aswitch.init_from_command_line_options ( argc , argv , my_transport, my_dev_mgr);
+	if (status != 0 ) return status ;
+	bm::packet_handler( port, buffer, len , static_cast<void * > (&aswitch)  ) ;
+}}
+#include "bf_lpm_trie.c"

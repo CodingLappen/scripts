@@ -1,0 +1,7 @@
+/home/tom/.scripts/XPATH_C_Parser/pugixml-1.10/CMakeFiles/install/strip.dir
+/home/tom/.scripts/XPATH_C_Parser/pugixml-1.10/CMakeFiles/install/local.dir
+/home/tom/.scripts/XPATH_C_Parser/pugixml-1.10/CMakeFiles/edit_cache.dir
+/home/tom/.scripts/XPATH_C_Parser/pugixml-1.10/CMakeFiles/pugixml.dir
+/home/tom/.scripts/XPATH_C_Parser/pugixml-1.10/CMakeFiles/rebuild_cache.dir
+/home/tom/.scripts/XPATH_C_Parser/pugixml-1.10/CMakeFiles/list_install_components.dir
+/home/tom/.scripts/XPATH_C_Parser/pugixml-1.10/CMakeFiles/install.dir

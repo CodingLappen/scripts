@@ -1,0 +1,1 @@
+gcc   -include bmi_interface.h -include bmi_port.h -include bf_lpm_trie.h  TEST.cpp #-fpermissive

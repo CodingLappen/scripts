@@ -1,0 +1,4 @@
+#!/bin/sh
+
+transmission-remote --add $1
+mv $1 $OLD_TORRENTDIR

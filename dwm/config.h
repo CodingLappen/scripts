@@ -1,7 +1,7 @@
 /* See LICENSE file for copyright and license details. */
 /* appearance */
 
-#define OPAQUE                  0xffU
+#define OPAQUE                  0xff
 /*static unsigned int borderalpha     = OPAQUE;*/
 static const unsigned int borderpx  = 1;        /* border pixel of windows */
 static const unsigned int snap      = 32;       /* snap pixel */
@@ -14,24 +14,25 @@ static const char col_gray2[]       = "#444444";
 static const char col_gray3[]       = "#bbbbbb";
 static const char col_gray4[]       = "#eeeeee";
 static const char col_cyan[]        = "#005577";
-static const char col_red[]	   	= "#cc0000";
-static const char col_green[]	  	= "#859900";
+static const char col_red[]	    = "#cc0000";
+static const char col_green[]	  	= "#22ff22";
 static const char col_purple[]	= "#5c3566";
 static const char col_black[]		= "#000000";
-static const char col_brown[] = "#B73602";
-static const int baralpha = 0x00;
+static const char col_brown[] = "#b73602";
+static const int baralpha = 0xff;
 static const int borderalpha = OPAQUE;
-
+static const int bar_select_alpha = 0xff;
+static const int bar_normal_alpha = 0x88;
 static const char *colors[][3]      = {
 	/*               fg         bg         border   */
-	[SchemeNorm] = { col_green, col_black, col_purple },
+	[SchemeNorm] = { col_green, col_purple, col_purple },
 	[SchemeSel]  = { col_brown, col_black,  col_cyan  },
 };
 
 static const unsigned int alphas[][3]      = {
 	/*               fg      bg        border     */
-	[SchemeNorm] = { OPAQUE,0x11, 0xFF  },
-	[SchemeSel]  = { OPAQUE, 0x11,0xFF  },
+	[SchemeNorm] = { OPAQUE,bar_normal_alpha, borderalpha  },
+	[SchemeSel]  = { OPAQUE, bar_select_alpha,borderalpha  },
 };
 
 
@@ -46,10 +47,16 @@ static const Rule rules[] = {
 	 *	WM_NAME(STRING) = title
 	 */
 	/* class      instance    title       tags mask     isfloating   monitor */
-	{ NULL,    	 "gimp",    NULL,       0,            0,           -1 },
-	{ "firefox",  	"firefox",	NULL,       1 << 3,       0,           0 },
-	{NULL,	"discord",	NULL,		24, /*  Tags one to four  */ 		0, 		1}, /* I want to start Discord always on the second monitor */ {NULL, 	"obs", 	NULL, 	1<<4 ,	0 ,		-1}
-
+	{ NULL,		"gimp",		NULL,       0,            0,	-1},
+	{ "firefox",  	"firefox",	NULL,       1 << 3,       0,	0},
+	{NULL,	"discord",	NULL,	24, /*  Tags one to four  */ 		
+								0, 	1},
+       	/* I want to start Discord always on the second monitor */
+       	{NULL, 	"obs", 	NULL, 	1<<4 ,	0 , -1},
+	{NULL,	"feh", 	NULL,	0, 1 ,-1}, // tag mask 0, floating, monitor is irrelevant
+	{NULL,	"mpv", 	NULL,	0, 1 ,-1},
+	{NULL,	"sxiv",	NULL,	0, 1 ,-1},
+	{NULL,	"mplayer", NULL,0, 1 ,-1}
 };
 
 /* layout(s) */
@@ -123,6 +130,7 @@ void spiral(Monitor *mon) {
 
 static void grid(Monitor *m);
 static void grid2(Monitor *m);
+static void grid2(Monitor *m);
 static void sgrid(Monitor *m);
 static const Layout layouts[] = {
 	/* symbol     arrange function */
@@ -143,6 +151,7 @@ floating behavior */
 
 /* key definitions */
 #define MODKEY Mod1Mask
+#define SUPERKEY Mod4Mask
 #define TAGKEYS(KEY,TAG) \
 	{ MODKEY,                       KEY,      view,           {.ui = 1 << TAG} }, \
 	{ MODKEY|ControlMask,           KEY,      toggleview,     {.ui = 1 << TAG} }, \
@@ -238,15 +247,20 @@ static void killunsel(const Arg *arg);
 static char dmenumon[2] = "0"; /* component of dmenucmd, manipulated in spawn() */
 static const char *dmenucmd[] = { "dmenu_run", "-m", dmenumon, "-fn", dmenufont, "-nb", col_gray1, "-nf", col_gray3, "-sb", col_cyan, "-sf", col_gray4, NULL };
 static const char *art_of_screenshots[] = {"take_screenshot",NULL};
-static const char *art_loading_screenshots[] = {"reaction2",NULL };
+static const char *art_loading_screenshots[] = {"load_screenshot",NULL };
 static const char *termcmd[]  = { "st", NULL };
 static const char *discord[] = {"discord", NULL};
 static const char *obs[] = {"obs", NULL};
 static const char *firefox[] ={"firefox", NULL};
 static const char *bluetooth[] = {" bluetooth", NULL};
-static const char *mate_settings[] = { "mate_settings",  NULL};
-
+//static const char *mate_settings[] = { "mate_settings",  NULL};
+static const char *layout[] = {"setxkbmap", "de", NULL };
+static const char *layout_en[] ={ "setxkbmap", "gb", NULL }; 
+static const char *ncmpcpp[]  = { "st", "-e", "ncmpcpp", NULL };
+static const char *lf[]  = { "st", "-e", "lf", NULL };
 /*  modkey is is the alt key usually so I just add some configs so I can open my standard programs faster*/
+/* The alt key is the mod1mask, while the super key is mod4mask (LEVEL 1 and LEVEL 4 ) Modification */
+/* mod4mask is also as SUPERKEY defined. */ 
 static Key keys[] = {
 	/* modifier                     key        function        argument */
 	{ MODKEY|ControlMask,         	XK_q,      	setlayout,      {.v = &layouts[1] } },
@@ -259,7 +273,9 @@ static Key keys[] = {
 	{ MODKEY|ControlMask,         	XK_b,  	   	togglebar,      {0} },
 	{ MODKEY|ControlMask,           XK_j,      	focusstack,     {.i = +1 } },
 	{ MODKEY|ControlMask,          	XK_k,      	focusstack,     {.i = -1 } },
-	{ MODKEY|ControlMask|ShiftMask,	XK_j,		movestack,      {.i = +1 }}, { MODKEY|ControlMask|ShiftMask,	XK_k,		movestack,      {.i = -1 }},	{ MODKEY|ControlMask,          	XK_n,      	incnmaster,     {.i = +1 } },
+	{ SUPERKEY,	XK_j,		movestack,      {.i = +1 }}, 
+	{ SUPERKEY,	XK_k,		movestack,      {.i = -1 }},	
+	{ MODKEY|ControlMask,          	XK_n,      	incnmaster,     {.i = +1 } },
 	{ MODKEY|ControlMask,       	XK_m,     	incnmaster,     {.i = -1 } },
 	{ MODKEY|ControlMask,          	XK_h,       	setmfact,       {.f = -0.05} },
 	{ MODKEY|ControlMask,          	XK_l,       	setmfact,       {.f = +0.05} },
@@ -268,19 +284,19 @@ static Key keys[] = {
 	{ MODKEY,			XK_f,		view, 		{0}},
 /*	{ MODKEY,                      	XK_Tab,    view,           {0} }, */
 	
-	{ MODKEY|ShiftMask,		XK_minus, 		togglemaximize, {0}},
-	{ MODKEY|ControlMask,		XK_v, 		toggleverticalmax, {0} },
-	{ MODKEY|ShiftMask,		XK_v, 		togglehorizontalmax, {0} },
+	{ SUPERKEY,			XK_y, 		togglemaximize, {0}},
+	{ MODKEY,			XK_v, 		toggleverticalmax, {0} },
+	{ SUPERKEY,			XK_v, 		togglehorizontalmax, {0} },
 
 
 
-	{MODKEY|ShiftMask,			XK_Tab,		rotatestack, 	{.i =-1}},	
-	{MODKEY,				XK_Tab, 	rotatestack, 	{.i=+1} },
-	{MODKEY|ShiftMask,			XK_Tab,		focusstack, 	{.i = 0} },	
-	{MODKEY,				XK_Tab,		focusstack, 	{.i = 0} },
+	{ SUPERKEY,			XK_Tab,		rotatestack, 	{.i =-1}},	
+	{ MODKEY,			XK_Tab, 	rotatestack, 	{.i =+1}},
+	{ SUPERKEY,			XK_Tab,		focusstack, 	{.i =+1}},	
+	{ MODKEY,			XK_Tab,		focusstack, 	{.i =0 }},
 
 
-	{ MODKEY|ControlMask,           XK_c,      	killunsel,       {0} },
+	{ SUPERKEY,		        XK_h,      	killunsel,       {0} },
 	{ MODKEY,            		XK_q,      	killclient,     {0} },	
 /*	{ MODKEY|ControlMask,       		XK_q,      killunsel,     {0} },
 */
@@ -290,8 +306,8 @@ static Key keys[] = {
 
 
 
-	{ MODKEY,                       XK_0,      view,           {.ui = ~0 } },
-	{ MODKEY|ShiftMask,             XK_0,      tag,            {.ui = ~0 } },
+	{ MODKEY,                       XK_0,      	view,           {.ui = ~0 } },
+	{ MODKEY|ShiftMask,             XK_0,      	tag,            {.ui = ~0 } },
 
 	/*{ MODKEY,                       XK_comma,  focusmon,       {.i = -1 } },
 	{ MODKEY,                       XK_period, focusmon,       {.i = +1 } },
@@ -301,10 +317,10 @@ static Key keys[] = {
 	TAGKEYS(                        XK_7,                      1)
 	TAGKEYS(                        XK_8,                      2)
 	TAGKEYS(                        XK_9,                      3)
-	{ MODKEY,			XK_comma,		focusmon,	{.i = -1 }},
-	{ MODKEY,			XK_period,		focusmon,	{.i = +1 }},
-	{ MODKEY|ControlMask,		XK_comma,	tagmon,		{.i = +1}},
-	{ MODKEY|ControlMask,		XK_period,	tagmon,	   	{.i = -1 }},
+	{ MODKEY,			XK_comma,	focusmon,	{.i = -1 }},
+	{ MODKEY,			XK_period,	focusmon,	{.i = +1 }},
+	{ SUPERKEY,			XK_comma,	tagmon,		{.i = -1}},
+	{ SUPERKEY,			XK_period,	tagmon,	   	{.i = +1 }},
 
 /*   Moving from one things from one Monitor to another and also switching the goddamn Monitor*/
 	{ MODKEY|ShiftMask, 		XK_period,	tagmon, 	{.i = +1}},
@@ -312,17 +328,18 @@ static Key keys[] = {
 	{ MODKEY|ShiftMask, 		XK_comma,	tagmon, 	{.i = -1}},
 	{ MODKEY|ShiftMask,		XK_comma,	focusmon,	{.i = -1}},
 	
-	{ MODKEY,               XK_p,   		spawn,         	{.v = dmenucmd } },
-	{ MODKEY|ControlMask,   XK_t,		 	spawn,		{.v = termcmd } },
-	{ MODKEY, 			XK_1,			spawn,	 	{.v = discord }},  /* spawns discord */
-	{ MODKEY,			XK_2, 		spawn, 		{.v = firefox}}, /*I usually use firefox */
+	{ MODKEY,               	XK_p,  		spawn,         	{.v = dmenucmd } },
+	{ MODKEY|ControlMask,   	XK_t,	 	spawn,		{.v = termcmd } },
+	{ MODKEY, 			XK_2,		spawn,	 	{.v = discord }},  /* spawns discord */
+	{ MODKEY,			XK_1, 		spawn, 		{.v = firefox}}, /*I usually use firefox */
 	{ MODKEY,			XK_3, 		spawn, 		{.v = obs }}, /*I obs */
-	{ MODKEY|ShiftMask,     XK_q,    	  	quit,           {0} },
+	{ MODKEY|ShiftMask,     	XK_q, 	  	quit,           {0} },
 	{ MODKEY,			XK_o, 		spawn, 		{ .v = art_of_screenshots } },
-	{ MODKEY|ControlMask,		XK_5,		spawn, 	{ .v =	mate_settings}},
-	{ MODKEY|ControlMask,		XK_6, 		spawn, { .v =	bluetooth}},
-
-{ MODKEY|ControlMask, 	XK_z,			spawn, 		{.v = art_loading_screenshots} }
+	{ SUPERKEY,			XK_6,		spawn, 		{ .v = layout	}},
+	{ SUPERKEY,			XK_7, 		spawn,		{ .v =	layout_en}},
+	{ SUPERKEY,			XK_8, 		spawn,		{ .v =	lf}},
+	{ SUPERKEY,			XK_9, 		spawn,		{ .v =	ncmpcpp}},
+	{ MODKEY, 			XK_y,		spawn, 		{ .v = art_loading_screenshots} }
 };
 
 
@@ -425,7 +442,6 @@ setltor1(const Arg *arg) {
 
 void
 toggletorall(const Arg *arg) {
-	Arg a;
 
 	if(sel && ((arg->ui & TAGMASK) == sel->tags)) {
 		a.ui = ~0;

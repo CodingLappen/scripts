@@ -1,4 +1,0 @@
-#!/bin/sh
-while [ "" == "" ]; do
-echo "26841397qweasd" | sudo openconnect --servercert "sha256:8e8974fcd69e815c80788209dc52e3b7eb38f1481b91927e8303f78b1ea44c2b" -u "tr299" --reconnect-timeout 0 --os=linux --no-http-keepalive --passwd-on-stdin 10.41.3.1
-done 
